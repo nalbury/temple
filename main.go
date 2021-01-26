@@ -20,13 +20,6 @@ func main() {
 		Name:      "temple",
 		Usage:     "Template files with arbitrary key value pairs",
 		UsageText: "temple --file ./myfile.tpl key=val foo=bar",
-		//ExitErrHandler: func(c *cli.Context, err error) {
-		//	if err == nil {
-		//		return
-		//	}
-		//	fmt.Println(err)
-		//	os.Exit(1)
-		//},
 		Action: func(c *cli.Context) error {
 			if c.NArg() > 0 {
 				for _, arg := range c.Args().Slice() {
@@ -54,10 +47,9 @@ func main() {
 		Flags: []cli.Flag{
 			&cli.PathFlag{
 				Name:        "file",
-				Value:       "",
+				Value:       "/dev/stdin",
 				Usage:       "File to template",
 				Destination: &file,
-				Required:    true,
 			},
 			&cli.BoolFlag{
 				Name:        "verbose",
