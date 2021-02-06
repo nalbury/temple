@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/Masterminds/sprig"
 	"os"
+	"path"
 	"strings"
 	"text/template"
 
@@ -35,7 +37,7 @@ func main() {
 				fmt.Fprintf(os.Stderr, "Args: %v\n", args)
 				fmt.Fprintf(os.Stderr, "Output:\n")
 			}
-			t, err := template.ParseFiles(file)
+			t, err := template.New(path.Base(file)).Funcs(sprig.TxtFuncMap()).ParseFiles(file)
 			if err != nil {
 				return err
 			}
