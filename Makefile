@@ -13,6 +13,7 @@ ARTIFACT_PATH = ./build/artifacts
 
 export GO_BUILD=GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BUILD_PATH)/temple ./
 export TAR=tar -czvf $(ARTIFACT_PATH)/temple-$(V)-$(GOOS)-$(GOARCH).tar.gz -C $(BUILD_PATH) temple
+export EXAMPLE_COMMAND=temple --file ./example.tpl app=temple flag=--file key=value
 
 build: setup ## Build temple binary
 	$(GO_BUILD)
@@ -37,8 +38,11 @@ release: ## Build binaries and create release artifactors for both linux and mac
 	OS="linux" ARCH="amd64" make build-artifact
 
 install: ## Build binary and install to the specified install path (default /usr/local/bin)
-	OS=$(OS) ARCH=$(ARCH) make build
+	$(GO_BUILD)
 	cp $(BUILD_PATH)/temple $(P)/temple
+
+readme: install ## Uses temple itself to generate the README.md for this project
+	temple --file README.md.tpl usage="`temple --help`" exampleCommand="$(EXAMPLE_COMMAND)" exampleOut="`$(EXAMPLE_COMMAND)`" > README.md
 
 help: ## Print Makefile help
 	@echo "Makefile for temple"

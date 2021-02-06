@@ -25,7 +25,9 @@ func main() {
 		Action: func(c *cli.Context) error {
 			if c.NArg() > 0 {
 				for _, arg := range c.Args().Slice() {
-					kv := strings.Split(arg, "=")
+					// We split into a max of two strings
+					// This allows us to safely assume that anything after the "=" is our value
+					kv := strings.SplitN(arg, "=", 2)
 					if len(kv) != 2 {
 						return fmt.Errorf("Couldn't parse arg: %s as a key value pair! Exiting", arg)
 					}
